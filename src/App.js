@@ -5,8 +5,10 @@ import logo from './logo.svg';
 import './App.css';
 import LocationSearchInput from './components/LocationSearchInput';
 
-const query =
-  'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=59.336220,18.079210&type=subway_station&rankby=distance&key=AIzaSyCwZhKoccHJYFnxSQ5FPOsAqOYHJ7Kly2Y';
+// const query =
+//   'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=59.336220,18.079210&type=subway_station&rankby=distance&key=AIzaSyCwZhKoccHJYFnxSQ5FPOsAqOYHJ7Kly2Y';
+
+const query = 'http://localhost:3001/api/place';
 
 function App() {
   const [address, setAddress] = useState('');
@@ -23,8 +25,11 @@ function App() {
   };
 
   const onGo = async () => {
+    console.log('ASKING...');
+
     const res = await fetch(query);
-    console.log({ res });
+    console.log('done');
+    console.log({ res: await res.json() });
   };
 
   return (
