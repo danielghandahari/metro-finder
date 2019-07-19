@@ -5,31 +5,48 @@ import logo from './logo.svg';
 import './App.css';
 import LocationSearchInput from './components/LocationSearchInput';
 
-// const query =
-//   'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=59.336220,18.079210&type=subway_station&rankby=distance&key=AIzaSyCwZhKoccHJYFnxSQ5FPOsAqOYHJ7Kly2Y';
-
 const query = 'http://localhost:3001/api/place';
 
 function App() {
   const [address, setAddress] = useState('');
+  const [subways, setSubways] = useState(null);
 
   const handleChange = address => {
     setAddress(address);
   };
 
   const handleSelect = address => {
-    geocodeByAddress(address)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng))
-      .catch(error => console.error('Error', error));
+    setAddress(address);
   };
 
   const onGo = async () => {
-    console.log('ASKING...');
+    setSubways(null);
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(async coordinates => {
+        console.log({ coordinates });
 
-    const res = await fetch(query);
-    console.log('done');
-    console.log({ res: await res.json() });
+        const res = await fetch(query, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            address,
+            coordinates,
+          }),
+        });
+        console.log({ res });
+
+        // TODO fixa status 200 men inga subways (majorna gbg)
+        let resJson;
+        if (res.status === 200) resJson = await res.json();
+
+        if (resJson)
+          setSubways(resJson.sort((a, b) => a.distanceValue - b.distanceValue));
+      })
+      .catch(error => console.error('Error: ', error));
   };
 
   return (
@@ -40,6 +57,15 @@ function App() {
         value={address}
       />
       <button onClick={onGo}>GO</button>
+      <>
+        {subways ? (
+          subways.map((s, i) => (
+            <div key={i}>{`${s.name} | ${s.distanceTextRepr}`}</div>
+          ))
+        ) : (
+          <div>Click GO to get closest subways!</div>
+        )}
+      </>
     </div>
   );
 }
