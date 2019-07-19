@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "concurrently": "^4.1.1",
     "express": "^4.17.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -11,6 +12,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:all": "concurrently \"yarn start\" \"nodemon server.js\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
