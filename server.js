@@ -9,6 +9,7 @@ var cors = require('cors');
 app.use(cors());
 
 const distance = require('google-distance-matrix');
+distance.mode('walking');
 distance.key(process.env.GOOGLE_MAPS_API_KEY);
 
 const bodyParser = require('body-parser');
