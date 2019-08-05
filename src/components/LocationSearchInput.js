@@ -1,23 +1,19 @@
 import React from 'react';
 import PlacesAutocomplete from 'react-places-autocomplete';
+import styled from 'styled-components';
+
+const Input = styled.input`
+  border-radius: 20px;
+  width: 20vw;
+  padding: 20px 25px;
+  margin-right: 15px;
+  outline: none;
+  border: solid lightgrey 1px;
+  color: grey;
+  font-size: 16px;
+`;
 
 const LocationSearchInput = ({ handleChange, handleSelect, value }) => {
-  //    constructor(props) {
-  //     super(props);
-  //     this.state = { address: '' };
-  //   }
-
-  //   handleChange = address => {
-  //     this.setState({ address });
-  //   };
-
-  //   handleSelect = address => {
-  //     geocodeByAddress(address)
-  //       .then(results => getLatLng(results[0]))
-  //       .then(latLng => console.log('Success', latLng))
-  //       .catch(error => console.error('Error', error));
-  //   };
-
   return (
     <PlacesAutocomplete
       value={value}
@@ -26,13 +22,16 @@ const LocationSearchInput = ({ handleChange, handleSelect, value }) => {
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div>
-          <input
+          <Input
             {...getInputProps({
               placeholder: 'Search Places ...',
               className: 'location-search-input',
             })}
           />
-          <div className="autocomplete-dropdown-container">
+          <div
+            className="autocomplete-dropdown-container"
+            style={{ position: 'absolute' }}
+          >
             {loading && <div>Loading...</div>}
             {suggestions.map(suggestion => {
               const className = suggestion.active

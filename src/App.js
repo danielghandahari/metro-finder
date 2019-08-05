@@ -5,12 +5,16 @@ import styled, { createGlobalStyle } from 'styled-components';
 import logo from './logo.svg';
 import './App.css';
 import LocationSearchInput from './components/LocationSearchInput';
+import Header from './components/Header';
+import { CONTENT_HIGHT } from './utils.js/variables';
+import Button from './components/Button';
 
 const query = 'http://localhost:3001/api/place';
 
 const Global = createGlobalStyle`
   html, body {
     background-color: #FAFAFA;
+    font-family: Muli;
   }
   ::selection {
     background: #FF8008;
@@ -27,7 +31,29 @@ const Global = createGlobalStyle`
 `;
 
 const Div = styled.div`
-  background: yellow;
+  background: #fafafa;
+
+  .content-container {
+    height: ${CONTENT_HIGHT};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .search {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .subways {
+      border: solid red 2px;
+
+      .subway {
+        margin-bottom: 10px;
+      }
+    }
+  }
 `;
 
 function App() {
@@ -50,7 +76,6 @@ function App() {
             coordinates,
           }),
         });
-        console.log({ res });
 
         // TODO fixa status 200 men inga subways (majorna gbg)
         let resJson;
@@ -65,25 +90,32 @@ function App() {
   const renderSubways = () => (
     <>
       {subways ? (
-        subways.map((s, i) => (
-          <div key={i}>{`${s.name} | ${s.distanceTextRepr}`}</div>
-        ))
-      ) : (
-        <div>Click GO to get closest subways!</div>
-      )}
+        <div className="subways">
+          {subways.map((s, i) => (
+            <div className="subway" key={i}>{`${s.name} → ${
+              s.distanceTextRepr
+            }`}</div>
+          ))}
+        </div>
+      ) : null}
     </>
   );
 
   return (
     <Div>
       <Global />
-      <LocationSearchInput
-        handleChange={newAddress => setAddress(newAddress)}
-        handleSelect={newAddress => setAddress(newAddress)}
-        value={address}
-      />
-      <button onClick={onGo}>GO</button>
-      {renderSubways()}
+      <Header />
+      <div className="content-container">
+        <div className="search">
+          <LocationSearchInput
+            handleChange={newAddress => setAddress(newAddress)}
+            handleSelect={newAddress => setAddress(newAddress)}
+            value={address}
+          />
+          <Button onClick={onGo}>GO</Button>
+        </div>
+        {renderSubways()}
+      </div>
     </Div>
   );
 }
