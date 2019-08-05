@@ -1,11 +1,34 @@
 import React, { useState } from 'react';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+import styled, { createGlobalStyle } from 'styled-components';
 
 import logo from './logo.svg';
 import './App.css';
 import LocationSearchInput from './components/LocationSearchInput';
 
 const query = 'http://localhost:3001/api/place';
+
+const Global = createGlobalStyle`
+  html, body {
+    background-color: #FAFAFA;
+  }
+  ::selection {
+    background: #FF8008;
+    color: #FAFAFA;
+  }
+
+  .video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+  }
+`;
+
+const Div = styled.div`
+  background: yellow;
+`;
 
 function App() {
   const [address, setAddress] = useState('');
@@ -52,7 +75,8 @@ function App() {
   );
 
   return (
-    <div className="App">
+    <Div>
+      <Global />
       <LocationSearchInput
         handleChange={newAddress => setAddress(newAddress)}
         handleSelect={newAddress => setAddress(newAddress)}
@@ -60,7 +84,7 @@ function App() {
       />
       <button onClick={onGo}>GO</button>
       {renderSubways()}
-    </div>
+    </Div>
   );
 }
 
