@@ -11,7 +11,7 @@ const ButtonComponent = styled.button`
   border-radius: 15px;
   font-size: 25px;
   font-family: arial, helvetica, sans-serif;
-  padding: 18px 18px 18px 18px;
+  padding: 15px;
   text-decoration: none;
   display: inline-block;
   text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
@@ -49,12 +49,13 @@ const ButtonComponent = styled.button`
     background-image: linear-gradient(to bottom, #007fcc, #ec2f4b);
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#007fcc, endColorstr=#EC2F4B);
   }
+
+  display: flex;
+  cursor: pointer;
 `;
 
 const Button = ({ children, onClick }) => (
-  <ButtonComponent className="button" onClick={onClick}>
-    {children}
-  </ButtonComponent>
+  <ButtonComponent onClick={onClick}>{children}</ButtonComponent>
 );
 
 export default Button;

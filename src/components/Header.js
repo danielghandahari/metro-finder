@@ -11,13 +11,19 @@ const Wrapper = styled.div`
   width: 100%;
   height: ${HEADER_HIGHT};
   box-shadow: ${shadow};
-  border-bottom-left-radius: 50px;
+  border-bottom-left-radius: 80px;
+  border-bottom-right-radius: 80px;
+
+  .image {
+    margin-left: 40px;
+    margin-top: 150px;
+  }
 `;
 
 const Header = () => {
   return (
     <Wrapper>
-      <img className="image" src={metroLogo} alt="" height={'150vw'} />
+      <img className="image" src={metroLogo} alt="" height={'200vw'} />
     </Wrapper>
   );
 };

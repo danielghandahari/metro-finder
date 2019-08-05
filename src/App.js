@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import styled, { createGlobalStyle } from 'styled-components';
+import 'typeface-muli';
 
 import logo from './logo.svg';
 import './App.css';
@@ -8,30 +9,25 @@ import LocationSearchInput from './components/LocationSearchInput';
 import Header from './components/Header';
 import { CONTENT_HIGHT } from './utils.js/variables';
 import Button from './components/Button';
+import arrow from '../src/assets/images/arrow.png';
+import coverVideo from '../src/assets/videos/cover-video.mp4';
 
 const query = 'http://localhost:3001/api/place';
 
 const Global = createGlobalStyle`
   html, body {
-    background-color: #FAFAFA;
+    background-color: rgba(255, 255, 255, 0.85);
     font-family: Muli;
+    overflow: hidden;
   }
   ::selection {
     background: #FF8008;
     color: #FAFAFA;
   }
-
-  .video {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%; 
-    min-height: 100%;
-  }
 `;
 
 const Div = styled.div`
-  background: #fafafa;
+  // background-color: rgba(0, 0, 0, 0.05);
 
   .content-container {
     height: ${CONTENT_HIGHT};
@@ -46,13 +42,26 @@ const Div = styled.div`
       align-items: center;
     }
 
-    .subways {
-      border: solid red 2px;
-
-      .subway {
-        margin-bottom: 10px;
-      }
+    .subway {
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: 900;
+      color: dodgerblue;
     }
+  }
+
+  #video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1000;
+    overflow: hidden;
   }
 `;
 
@@ -89,21 +98,23 @@ function App() {
 
   const renderSubways = () => (
     <>
-      {subways ? (
-        <div className="subways">
-          {subways.map((s, i) => (
+      {subways
+        ? subways.map((s, i) => (
             <div className="subway" key={i}>{`${s.name} → ${
               s.distanceTextRepr
             }`}</div>
-          ))}
-        </div>
-      ) : null}
+          ))
+        : null}
     </>
   );
 
   return (
     <Div>
       <Global />
+      <video autoPlay muted loop id="video">
+        <source src={coverVideo} type="video/mp4" />
+        Your browser does not support HTML5 video.
+      </video>
       <Header />
       <div className="content-container">
         <div className="search">
@@ -112,7 +123,9 @@ function App() {
             handleSelect={newAddress => setAddress(newAddress)}
             value={address}
           />
-          <Button onClick={onGo}>GO</Button>
+          <Button onClick={onGo}>
+            <img src={arrow} alt="GO" width={30} height={30} />
+          </Button>
         </div>
         {renderSubways()}
       </div>
