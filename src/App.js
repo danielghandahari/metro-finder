@@ -3,7 +3,6 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import styled, { createGlobalStyle } from 'styled-components';
 import 'typeface-muli';
 
-import logo from './logo.svg';
 import './App.css';
 import LocationSearchInput from './components/LocationSearchInput';
 import Header from './components/Header';
@@ -14,8 +13,6 @@ import coverVideo from '../src/assets/videos/cover-video.mp4';
 import Modal from './components/Modal';
 import Text from './components/Text';
 
-// const query = 'http://localhost:3001/api/place';
-// const query = 'http://localhost:9000/.netlify/functions/server/place';
 const query = '/.netlify/functions/server/place';
 
 const Global = createGlobalStyle`
