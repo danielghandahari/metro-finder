@@ -25,21 +25,17 @@ app.post('/api/place', async (req, res) => {
   if (!coordinates || !address) res.sendStatus(422);
 
   const result = await getNearestSubways(coordinates);
-
   const subways = result.map(r => r.name);
-
-  if (!subways.length) res.send('Failed finding subways');
   const subwayDistances = await getSubwayDistances(subways, address);
 
-  if (!result || !subways || !subwayDistances) res.sendStatus(404);
-  res.send(subwayDistances);
+  if (!result.length || !subways.length || !subwayDistances) {
+    res.sendStatus(404);
+  } else {
+    res.send(subwayDistances);
+  }
 });
 
 async function getSubwayDistances(subways, address) {
-  // const {
-  //   rows: [{ elements }],
-  // } = await getDistancePromise([address], subways);
-
   const distances = await getDistancePromise([address], subways);
   const elements =
     distances &&

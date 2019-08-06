@@ -7,10 +7,12 @@ import logo from './logo.svg';
 import './App.css';
 import LocationSearchInput from './components/LocationSearchInput';
 import Header from './components/Header';
-import { CONTENT_HIGHT } from './utils.js/variables';
+import { CONTENT_HIGHT, shadow } from './utils.js/variables';
 import Button from './components/Button';
 import arrow from '../src/assets/images/arrow.png';
 import coverVideo from '../src/assets/videos/cover-video.mp4';
+import Modal from './components/Modal';
+import Text from './components/Text';
 
 const query = 'http://localhost:3001/api/place';
 
@@ -20,15 +22,19 @@ const Global = createGlobalStyle`
     font-family: Muli;
     overflow: hidden;
   }
+
+  button {
+    outline: none;
+    cursor: pointer;
+  }
+
   ::selection {
-    background: #FF8008;
+    background: #0082C8;
     color: #FAFAFA;
   }
 `;
 
 const Div = styled.div`
-  // background-color: rgba(0, 0, 0, 0.05);
-
   .content-container {
     height: ${CONTENT_HIGHT};
     display: flex;
@@ -63,13 +69,27 @@ const Div = styled.div`
     z-index: -1000;
     overflow: hidden;
   }
+
+  .modal-button {
+    background-image: linear-gradient(to right, #ed213a, #f2495d);
+    font-weight: 900;
+    padding: 11px;
+    font-size: 18px;
+    border-radius: 14px;
+    border: none;
+    color: #ffffff;
+    box-shadow: ${shadow};
+    margin-left: 20px;
+  }
 `;
 
 function App() {
   const [address, setAddress] = useState('');
   const [subways, setSubways] = useState(null);
+  const [noSubwaysText, setNoSubwaysText] = useState('');
 
   const onGo = async () => {
+    if (noSubwaysText.length) setNoSubwaysText('');
     setSubways(null);
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
@@ -86,26 +106,37 @@ function App() {
           }),
         });
 
-        // TODO fixa status 200 men inga subways (majorna gbg)
         let resJson;
-        if (res.status === 200) resJson = await res.json();
+        if (res.status === 200) {
+          resJson = await res.json();
+        } else if (res.status === 404) {
+          setNoSubwaysText('There are no subways near the given address!');
+        } else {
+          setNoSubwaysText('Failed finding subways near the given address.');
+        }
 
         if (resJson)
           setSubways(resJson.sort((a, b) => a.distanceValue - b.distanceValue));
       })
-      .catch(error => console.error('Error: ', error));
+      .catch(error => {
+        setNoSubwaysText('Failed finding subways near the given address.');
+        console.error('Error: ', error);
+      });
   };
 
   const renderSubways = () => (
-    <>
-      {subways
-        ? subways.map((s, i) => (
-            <div className="subway" key={i}>{`${s.name} → ${
-              s.distanceTextRepr
-            }`}</div>
-          ))
-        : null}
-    </>
+    <Modal>
+      <div>
+        {subways.map((s, i) => (
+          <div className="subway" key={i}>{`${s.name} → ${
+            s.distanceTextRepr
+          }`}</div>
+        ))}
+      </div>
+      <button className="modal-button" onClick={() => setSubways(null)}>
+        X
+      </button>
+    </Modal>
   );
 
   return (
@@ -117,17 +148,23 @@ function App() {
       </video>
       <Header />
       <div className="content-container">
-        <div className="search">
-          <LocationSearchInput
-            handleChange={newAddress => setAddress(newAddress)}
-            handleSelect={newAddress => setAddress(newAddress)}
-            value={address}
-          />
-          <Button onClick={onGo}>
-            <img src={arrow} alt="GO" width={30} height={30} />
-          </Button>
-        </div>
-        {renderSubways()}
+        {subways ? (
+          <>{renderSubways()}</>
+        ) : (
+          <div className="search">
+            <LocationSearchInput
+              handleChange={newAddress => setAddress(newAddress)}
+              handleSelect={newAddress => setAddress(newAddress)}
+              value={address}
+              onPressEnter={onGo}
+            />
+            <Button onClick={onGo}>
+              <img src={arrow} alt="GO" width={30} height={30} />
+            </Button>
+          </div>
+        )}
+        <br />
+        {<Text>{noSubwaysText}</Text>}
       </div>
     </Div>
   );

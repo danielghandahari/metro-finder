@@ -13,48 +13,61 @@ const Input = styled.input`
   font-size: 16px;
 `;
 
-const LocationSearchInput = ({ handleChange, handleSelect, value }) => {
+const LocationSearchInput = ({
+  handleChange,
+  handleSelect,
+  value,
+  onPressEnter,
+}) => {
   return (
     <PlacesAutocomplete
       value={value}
       onChange={handleChange}
       onSelect={handleSelect}
     >
-      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-        <div>
-          <Input
-            {...getInputProps({
-              placeholder: 'Search Places ...',
-              className: 'location-search-input',
-            })}
-          />
-          <div
-            className="autocomplete-dropdown-container"
-            style={{ position: 'absolute' }}
-          >
-            {loading && <div>Loading...</div>}
-            {suggestions.map(suggestion => {
-              const className = suggestion.active
-                ? 'suggestion-item--active'
-                : 'suggestion-item';
-              // inline style for demonstration purpose
-              const style = suggestion.active
-                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                : { backgroundColor: '#ffffff', cursor: 'pointer' };
-              return (
-                <div
-                  {...getSuggestionItemProps(suggestion, {
-                    className,
-                    style,
-                  })}
-                >
-                  <span>{suggestion.description}</span>
-                </div>
-              );
-            })}
+      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => {
+        const inputProps = getInputProps({
+          placeholder: 'Search Places ...',
+          className: 'location-search-input',
+        });
+
+        return (
+          <div>
+            <Input
+              {...inputProps}
+              onKeyDown={e => {
+                if (e.key === 'Enter') onPressEnter();
+                return inputProps.onKeyDown(e);
+              }}
+            />
+            <div
+              className="autocomplete-dropdown-container"
+              style={{ position: 'absolute' }}
+            >
+              {loading && <div>Loading...</div>}
+              {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                return (
+                  <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        );
+      }}
     </PlacesAutocomplete>
   );
 };
