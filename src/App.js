@@ -80,6 +80,16 @@ const Div = styled.div`
     box-shadow: ${shadow};
     margin-left: 20px;
   }
+
+  @media screen and (max-width: 768px) {
+    #video {
+      display: none;
+    }
+
+    .search {
+      transform: scale(0.85);
+    }
+  }
 `;
 
 function App() {

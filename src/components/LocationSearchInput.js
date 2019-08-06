@@ -4,13 +4,17 @@ import styled from 'styled-components';
 
 const Input = styled.input`
   border-radius: 20px;
-  width: 35vw;
+  width: 40vw;
   padding: 20px 25px;
   margin-right: 20px;
   outline: none;
   border: solid lightgrey 1px;
   color: grey;
   font-size: 16px;
+
+  @media screen and (max-width: 768px) {
+    width: 55vw;
+  }
 `;
 
 const LocationSearchInput = ({

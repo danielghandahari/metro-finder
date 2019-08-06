@@ -15,15 +15,26 @@ const Wrapper = styled.div`
   border-bottom-right-radius: 80px;
 
   .image {
-    margin-left: 40px;
     margin-top: 150px;
+    width: 400px;
+  }
+
+  @media screen and (max-width: 768px) {
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    height: calc(${HEADER_HIGHT} - 90px);
+
+    .image {
+      margin-top: 60px;
+      width: 200px;
+    }
   }
 `;
 
 const Header = () => {
   return (
     <Wrapper>
-      <img className="image" src={metroLogo} alt="" height={'200vw'} />
+      <img className="image" src={metroLogo} alt="" />
     </Wrapper>
   );
 };
