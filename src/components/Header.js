@@ -22,11 +22,11 @@ const Wrapper = styled.div`
   @media screen and (max-width: 768px) {
     border-bottom-left-radius: 40px;
     border-bottom-right-radius: 40px;
-    height: calc(${HEADER_HIGHT} - 90px);
+    height: calc(${HEADER_HIGHT} - 60px);
 
     .image {
-      margin-top: 60px;
-      width: 200px;
+      margin-top: 70px;
+      width: 150px;
     }
   }
 `;

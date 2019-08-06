@@ -173,7 +173,7 @@ function App() {
           </div>
         )}
         <br />
-        {<Text>{noSubwaysText}</Text>}
+        <Text>{noSubwaysText}</Text>
       </div>
     </Div>
   );

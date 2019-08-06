@@ -11,6 +11,10 @@ const Div = styled.div`
   overflow: scroll;
   max-height: 55vh;
   box-shadow: ${shadow};
+
+  @media screen and (max-width: 768px) {
+    padding: 40px 20px;
+  }
 `;
 
 const Modal = ({ children }) => <Div>{children}</Div>;
