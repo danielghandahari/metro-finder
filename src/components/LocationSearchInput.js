@@ -27,7 +27,7 @@ const LocationSearchInput = ({
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => {
         const inputProps = getInputProps({
-          placeholder: 'Search Places ...',
+          placeholder: 'Addresses, subways, places...',
           className: 'location-search-input',
         });
 
