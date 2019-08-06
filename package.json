@@ -9,18 +9,23 @@
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "google-distance-matrix": "^1.1.1",
+    "http-proxy-middleware": "^0.19.1",
+    "netlify-lambda": "^1.5.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-places-autocomplete": "^7.2.1",
     "react-scripts": "3.0.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
+    "serverless-http": "^2.0.2",
     "styled-components": "^4.3.2",
     "typeface-muli": "^0.0.71"
   },
   "scripts": {
     "start": "react-scripts start",
     "start:all": "concurrently \"yarn start\" \"nodemon server.js\"",
+    "start:lambda": "concurrently \"yarn start\" \"./node_modules/.bin/netlify-lambda serve server\"",
+    "build:lambda": "./node_modules/.bin/netlify-lambda build server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

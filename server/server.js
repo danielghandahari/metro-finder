@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
+const router = express.Router();
+const serverless = require('serverless-http');
 
 require('dotenv').config();
 var rp = require('request-promise');
-const port = 3001;
 
 var cors = require('cors');
 app.use(cors());
@@ -20,7 +21,7 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.post('/api/place', async (req, res) => {
+router.post('/place', async (req, res) => {
   const { coordinates, address } = req.body;
   if (!coordinates || !address) res.sendStatus(422);
 
@@ -31,7 +32,7 @@ app.post('/api/place', async (req, res) => {
   if (!result.length || !subways.length || !subwayDistances) {
     res.sendStatus(404);
   } else {
-    res.send(subwayDistances);
+    res.json(subwayDistances);
   }
 });
 
@@ -89,4 +90,5 @@ function getDistancePromise(origins, destinations) {
   });
 }
 
-app.listen(port, () => console.log(`Listening on port ${port}!`));
+app.use('/.netlify/functions/server', router);
+module.exports.handler = serverless(app);
