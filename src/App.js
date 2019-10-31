@@ -12,6 +12,7 @@ import arrow from '../src/assets/images/arrow.png';
 import coverVideo from '../src/assets/videos/cover-video.mp4';
 import Modal from './components/Modal';
 import Text from './components/Text';
+import Loading from './components/Loading';
 
 const query = '/.netlify/functions/server/place';
 
@@ -96,8 +97,10 @@ function App() {
   const [address, setAddress] = useState('');
   const [subways, setSubways] = useState(null);
   const [noSubwaysText, setNoSubwaysText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const onGo = async () => {
+    setIsLoading(true);
     if (noSubwaysText.length) setNoSubwaysText('');
     setSubways(null);
     geocodeByAddress(address)
@@ -126,10 +129,12 @@ function App() {
 
         if (resJson)
           setSubways(resJson.sort((a, b) => a.distanceValue - b.distanceValue));
+        setIsLoading(false);
       })
       .catch(error => {
         setNoSubwaysText('Failed finding subways near the given address.');
         console.error('Error: ', error);
+        setIsLoading(false);
       });
   };
 
@@ -137,9 +142,10 @@ function App() {
     <Modal>
       <div>
         {subways.map((s, i) => (
-          <div className="subway" key={i}>{`${s.name} → ${
-            s.distanceTextRepr
-          }`}</div>
+          <div
+            className="subway"
+            key={i}
+          >{`${s.name} → ${s.distanceTextRepr}`}</div>
         ))}
       </div>
       <button className="modal-button" onClick={() => setSubways(null)}>
@@ -174,6 +180,7 @@ function App() {
         )}
         <br />
         <Text>{noSubwaysText}</Text>
+        <Loading isLoading={isLoading} />
       </div>
     </Div>
   );
