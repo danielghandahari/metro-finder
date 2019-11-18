@@ -23,9 +23,9 @@
     "typeface-muli": "^0.0.71"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start:all": "concurrently \"yarn start\" \"nodemon server.js\"",
-    "start:lambda": "concurrently \"yarn start\" \"./node_modules/.bin/netlify-lambda serve server\"",
+    "start:react": "react-scripts start",
+    "start:lambda": "./node_modules/.bin/netlify-lambda serve server",
+    "start": "concurrently \"yarn start:react\" \"yarn start:lambda\"",
     "build:lambda": "./node_modules/.bin/netlify-lambda build server",
     "build": "react-scripts build",
     "test": "react-scripts test",

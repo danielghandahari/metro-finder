@@ -25,17 +25,12 @@ app.use(
 app.use(bodyParser.json());
 
 router.post('/place', async (req, res) => {
-  console.log('in placceeee###');
   const { coordinates, address } = req.body;
   if (!coordinates || !address) res.sendStatus(422);
 
-  console.log({ coordinates, address });
   const result = await getNearestSubways(coordinates);
-  console.log({ result });
   const subways = result.map(r => r.name);
   const subwayDistances = await getSubwayDistances(subways, address);
-
-  console.log({ subwayDistances });
 
   if (!result.length || !subways.length || !subwayDistances) {
     res.sendStatus(404);
