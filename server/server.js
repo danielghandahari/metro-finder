@@ -1,3 +1,6 @@
+// require('babel-core/register');
+// require('babel-polyfill');
+
 const express = require('express');
 const app = express();
 const router = express.Router();
@@ -22,12 +25,17 @@ app.use(
 app.use(bodyParser.json());
 
 router.post('/place', async (req, res) => {
+  console.log('in placceeee###');
   const { coordinates, address } = req.body;
   if (!coordinates || !address) res.sendStatus(422);
 
+  console.log({ coordinates, address });
   const result = await getNearestSubways(coordinates);
+  console.log({ result });
   const subways = result.map(r => r.name);
   const subwayDistances = await getSubwayDistances(subways, address);
+
+  console.log({ subwayDistances });
 
   if (!result.length || !subways.length || !subwayDistances) {
     res.sendStatus(404);
@@ -62,12 +70,10 @@ async function getSubwayDistances(subways, address) {
 }
 
 async function getNearestSubways(coordinates) {
+  console.log('COORDS', coordinates);
+
   if (coordinates.lat && coordinates.lng) {
-    const query = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${
-      coordinates.lat
-    },${coordinates.lng}&type=subway_station&rankby=distance&key=${
-      process.env.GOOGLE_MAPS_API_KEY
-    }`;
+    const query = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${coordinates.lat},${coordinates.lng}&type=subway_station&rankby=distance&key=${process.env.GOOGLE_MAPS_API_KEY}`;
     const res = await rp(query);
     const resJson = JSON.parse(res);
 
